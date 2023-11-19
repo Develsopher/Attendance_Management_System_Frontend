@@ -7,6 +7,9 @@ import MainLayout from '../layout/MainLayout/index.jsx';
 const DashboardDefault = Loadable(
   lazy(() => import('../pages/dashboard/index.jsx')),
 );
+const SearchResults = Loadable(
+  lazy(() => import('../pages/serachresult/index.jsx')),
+);
 
 const MainRoutes = {
   path: '/',
@@ -15,6 +18,10 @@ const MainRoutes = {
     {
       path: '/',
       element: <DashboardDefault />,
+    },
+    {
+      path: 'search/results',
+      element: <SearchResults />,
     },
   ],
 };
