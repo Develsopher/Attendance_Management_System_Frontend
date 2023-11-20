@@ -21,7 +21,7 @@ const MainRoutes = {
       element: <DashboardDefault />,
     },
     {
-      path: 'search/results',
+      path: 'search/results/:id',
       element: <SearchResults />,
     },
     {

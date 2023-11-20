@@ -1,0 +1,49 @@
+{
+    "players" : [
+        {   
+            "id" : 1,
+            "name" : "윤혜진",
+            "email" : "imhaejin98@gmail.com",
+            "pw" : "1234",
+            "course" : "풀스택 3회차"
+        },
+        {
+            "id" : 2,
+            "name" : "정재우",
+            "email" : "jwjh1205@gmail.com",
+            "pw" : "1234",
+            "course" : "풀스택 3회차"
+        },
+        {
+            "id" : 3,
+            "name" : "김민식",
+            "email" : "kims_______@naver.com",
+            "pw" : "1234",
+            "course" : "풀스택 3회차"
+        },
+        {
+            "id" : 4,
+            "name" : "권승목",
+            "email" : "k98906303@gmail.com",
+            "pw" : "1234",
+            "course" : "풀스택 3회차"
+        },
+        {
+            "id" : 5,
+            "name" : "채준형",
+            "email" : "chae@gmail.com",
+            "pw" : "1234",
+            "course" : "풀스택 3회차"
+        },
+        {
+            "id" : 6,
+            "name" : "남규린",
+            "email" : "nam@gmail.com",
+            "pw" : "1234",
+            "course" : "풀스택 3회차"
+        }
+
+
+
+    ]
+}
