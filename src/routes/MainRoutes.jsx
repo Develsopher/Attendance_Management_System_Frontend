@@ -10,6 +10,7 @@ const DashboardDefault = Loadable(
 const SearchResults = Loadable(
   lazy(() => import('../pages/serachresult/index.jsx')),
 );
+const AdminManage = Loadable(lazy(() => import('../pages/admin/manage')));
 
 const MainRoutes = {
   path: '/',
@@ -22,6 +23,10 @@ const MainRoutes = {
     {
       path: 'search/results',
       element: <SearchResults />,
+    },
+    {
+      path: 'admin/manage',
+      element: <AdminManage />,
     },
   ],
 };
