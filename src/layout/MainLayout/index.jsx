@@ -17,6 +17,7 @@ function MainLayout() {
         component="main"
         sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}
       >
+        <Toolbar />
         <Outlet />
       </Box>
     </Box>
