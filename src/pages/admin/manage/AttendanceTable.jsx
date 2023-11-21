@@ -10,25 +10,15 @@ import {
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import SendIcon from '@mui/icons-material/Send';
-import { students } from '../../../config';
+import { formatDate } from '../../../utils/helper';
 
-function AttendanceTable({ classType, date }) {
-  const initialAttendance = {};
-  students.forEach((student) => {
-    initialAttendance[student.id] = Array(8).fill(0); // 각 교시별 초기 상태는 0
-  });
-
-  const [attendance, setAttendance] = useState(initialAttendance);
+function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
+  const [data, setData] = useState(attendanceData);
   const saveAttendance = () => {
-    const studentsData = students.map((student) => ({
-      id: student.id,
-      attendance: attendance[student.id],
-    }));
-    // API에 보낼 전체 데이터 구조
     const dataToSend = {
-      classType,
-      date,
-      students: studentsData,
+      cousre: selectedCourse,
+      date: formatDate(selectedDate),
+      students: data,
     };
 
     console.log('dataToSend', dataToSend);
@@ -36,36 +26,46 @@ function AttendanceTable({ classType, date }) {
 
   // 전체 셀을 '1'로 변경
   const setAllToOne = () => {
-    const updated = {};
-    students.forEach((student) => {
-      updated[student.id] = Array(8).fill(1);
-    });
-    setAttendance(updated);
+    const updated = data.map((student) => ({
+      ...student,
+      attendance: student.attendance.map(() => 1),
+    }));
+    setData(updated);
   };
   const setAllReset = () => {
-    const updated = {};
-    students.forEach((student) => {
-      updated[student.id] = Array(8).fill(0);
-    });
-    setAttendance(updated);
+    const updated = data.map((student) => ({
+      ...student,
+      attendance: student.attendance.map(() => 0),
+    }));
+    setData(updated);
   };
 
   // 특정 학생의 모든 셀을 '1'로 변경
   const setRowToOne = (studentId) => {
-    setAttendance((prev) => ({
-      ...prev,
-      [studentId]: Array(8).fill(1),
-    }));
+    const updated = data.map((student) => {
+      if (student.id === studentId) {
+        return {
+          ...student,
+          attendance: student.attendance.map(() => 1),
+        };
+      }
+      return student;
+    });
+    setData(updated);
   };
 
   const handleStatusChange = (studentId, period, event) => {
     const newValue = event.target.value;
-    setAttendance((prev) => ({
-      ...prev,
-      [studentId]: prev[studentId].map((value, index) =>
-        index === period ? newValue : value,
-      ),
-    }));
+    const updated = data.map((student) => {
+      if (student.id === studentId) {
+        const updatedAttendance = student.attendance.map((value, index) =>
+          index === period ? newValue : value,
+        );
+        return { ...student, attendance: updatedAttendance };
+      }
+      return student;
+    });
+    setData(updated);
   };
 
   const attendanceColors = {
@@ -124,44 +124,45 @@ function AttendanceTable({ classType, date }) {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {students.map((student) => (
+            {data.map((student) => (
               <tr key={student.id}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {student.name}
                 </td>
-                {[...Array(8).keys()].map((period) => (
-                  <td
-                    key={period}
-                    className={`px-2 py-0 whitespace-nowrap text-sm text-center `}
-                  >
-                    <FormControl variant="outlined" size="small">
-                      <Select
-                        value={attendance[student.id][period]}
-                        onChange={(event) =>
-                          handleStatusChange(student.id, period, event)
-                        }
-                        inputProps={{
-                          sx: {
-                            backgroundColor:
-                              attendanceColors[attendance[student.id][period]],
-                            fontSize: '14px',
-                            width: '30px',
-                          },
-                        }}
-                      >
-                        <MenuItem value={0}>-</MenuItem>
-                        <MenuItem value={1} className="text-xs">
-                          출석
-                        </MenuItem>
-                        <MenuItem value={2}>지각</MenuItem>
-                        <MenuItem value={3}>조퇴</MenuItem>
-                        <MenuItem value={4}>외출</MenuItem>
-                        <MenuItem value={5}>결석</MenuItem>
-                        <MenuItem value={6}>공결</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </td>
-                ))}
+                {student.attendance.map((period, index) => {
+                  return (
+                    <td
+                      key={index}
+                      className="px-2 py-0 whitespace-nowrap text-sm text-center "
+                    >
+                      <FormControl variant="outlined" size="small">
+                        <Select
+                          value={period}
+                          onChange={(event) =>
+                            handleStatusChange(student.id, index, event)
+                          }
+                          inputProps={{
+                            sx: {
+                              backgroundColor: attendanceColors[period],
+                              fontSize: '14px',
+                              width: '30px',
+                            },
+                          }}
+                        >
+                          <MenuItem value={0}>-</MenuItem>
+                          <MenuItem value={1} className="text-xs">
+                            출석
+                          </MenuItem>
+                          <MenuItem value={2}>지각</MenuItem>
+                          <MenuItem value={3}>조퇴</MenuItem>
+                          <MenuItem value={4}>외출</MenuItem>
+                          <MenuItem value={5}>결석</MenuItem>
+                          <MenuItem value={6}>공결</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </td>
+                  );
+                })}
                 <td>
                   <Button
                     variant="contained"

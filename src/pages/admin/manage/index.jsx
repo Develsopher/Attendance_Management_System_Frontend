@@ -1,80 +1,125 @@
-import React, { useState } from 'react';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { Typography, Button, Card } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { classLists } from '../../../config';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { getCourses, getAttendanceData } from '../../../apis';
 import AttendanceTable from './AttendanceTable';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { formatDate, parseDate } from '../../../utils/helper';
+import './index.css';
 
 function Manage() {
-  const [classType, setClassType] = useState('');
-  const [date, setDate] = useState(null);
-  const [searchPerformed, setSearchPerformed] = useState(false);
-  const handleClassSelect = (event) => {
-    setClassType(
-      typeof event.target.value === 'string'
-        ? event.target.value.split(',')
-        : event.target.value,
-    );
-  };
-  const fallback = (
-    <Card className="flex justify-center items-center h-1/2">
-      <h3 className="text-3xl">해당 데이터가 없습니다. 🐤</h3>
-    </Card>
-  );
+  const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearch = () => {
-    setSearchPerformed(true);
-    // api get
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  const course = queryParams.get('course');
+  const date = queryParams.get('date');
+
+  useEffect(() => {
+    getCourses().then((courses) => setCourses(courses));
+  }, []);
+
+  useEffect(() => {
+    if (course && date) {
+      fetchData(course, date);
+      setSelectedCourse(course);
+      setSelectedDate(parseDate(date));
+    }
+  }, []);
+
+  const handleClassSelect = (event) => {
+    setSelectedCourse(event.target.value);
   };
+
+  const handleSearch = async () => {
+    if (selectedCourse && selectedDate) {
+      const formattedDate = formatDate(selectedDate);
+      await fetchData(selectedCourse, formattedDate);
+      navigate(
+        `/admin/manage?course=${encodeURIComponent(
+          selectedCourse,
+        )}&date=${encodeURIComponent(formattedDate)}`,
+      );
+    } else {
+      alert('검색 조건을 채워주세요.');
+    }
+  };
+
+  const fetchData = async (course, date) => {
+    setIsLoading(true);
+    try {
+      const data = await getAttendanceData(course, date);
+      setAttendanceData(data.students);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <main className="h-screen space-y-4">
-      <Card className="px-4 py-8">
-        <Typography variant="h5">출석 관리</Typography>
-        <div className="max-w-3xl mx-auto flex items-baseline justify-center gap-x-4">
-          <FormControl size="small" sx={{ minWidth: 250 }}>
-            <InputLabel id="class-type">차수</InputLabel>
-            <Select
-              labelId="class-type"
-              id="class-type-name"
-              value={classType}
+      <div className="card bg-white px-4 py-8 shadow-lg">
+        <h5 className="text-xl font-semibold mb-4">출석 관리</h5>
+        <div className="max-w-3xl mx-auto flex items-end justify-center gap-x-4">
+          <div>
+            <label
+              className="block text-sm font-bold mb-2"
+              htmlFor="class-type"
+            >
+              차수
+            </label>
+            <select
+              className="shadow border rounded w-full py-2 px-3 text-gray-700"
+              id="class-type"
+              value={selectedCourse}
               onChange={handleClassSelect}
             >
-              {classLists.map((name) => (
-                <MenuItem key={name} value={name}>
-                  {name}
-                </MenuItem>
+              <option value="">-</option>
+              {courses.map((course) => (
+                <option key={course.id} value={course.name}>
+                  {course.name}
+                </option>
               ))}
-            </Select>
-          </FormControl>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-              <DatePicker
-                label="날짜"
-                value={date}
-                onChange={(newValue) => setDate(newValue)}
-                format="YYYY-MM-DD"
-                slotProps={{ textField: { size: 'small' } }}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-          <Button variant="contained" onClick={handleSearch}>
-            검색
-          </Button>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-bold mb-2">날짜</label>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(newDate) => setSelectedDate(newDate)}
+              className="shadow border rounded w-full py-2 px-3 text-gray-700 cursor-pointer z-20"
+              dateFormat="yyyy-MM-dd"
+            />
+          </div>
+          <div>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleSearch}
+            >
+              검색
+            </button>
+          </div>
         </div>
-      </Card>
-      <div className="h-full ">
-        {searchPerformed ? (
-          <AttendanceTable classType={classType} date={date} />
-        ) : (
-          fallback
-        )}
       </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center">로딩 중...</div> // 로딩 표시
+      ) : (
+        <div className="h-full">
+          {attendanceData.length > 0 && (
+            <AttendanceTable
+              selectedCourse={selectedCourse}
+              selectedDate={selectedDate}
+              attendanceData={attendanceData}
+            />
+          )}
+        </div>
+      )}
     </main>
   );
 }
