@@ -1,47 +1,50 @@
-import * as React from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { PickersDay } from '@mui/lab';
-
-import dayjs from 'dayjs';
+import React from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 export default function MyCalendar() {
-  // 날짜별 player_state 정보 (예시)
-  const playerStates = {
+  const handleDateClick = (arg) => {
+    alert(arg.dateStr);
+    
+  };
+
+  const dateStates = {
+    '2023-11-01': '결석',
+    '2023-11-02': '외출',
+    '2023-11-03': '결석',
+    '2023-11-06': '결석',
+    '2023-11-07': '결석',
+    '2023-11-08': '결석',
+    '2023-11-09': '조퇴',
     '2023-11-10': '출석',
-    '2023-11-20': '결석',
-    // 다른 날짜들에 대한 상태도 추가 가능
+    '2023-11-13': '결석',
+    '2023-11-14': '외출',
+    '2023-11-15': '외출',
+    '2023-11-16': '결석',
+    '2023-11-17': '결석',
+    '2023-11-20': '출석',
+    '2023-11-21': '외출',
+    '2023-11-22': '조퇴',
+    '2023-11-23': '조퇴',
+    '2023-11-24': '출석',
+    '2023-11-27': '조퇴',
+    '2023-11-28': '출석',
+    '2023-11-29': '출석',
+    '2023-11-30': '조퇴'
   };
 
-  const renderDay = (date, selectedDates, pickersDayProps) => {
-    const dateString = dayjs(date).format('YYYY-MM-DD');
-
-    // 날짜에 해당하는 player_state를 찾습니다.
-    const playerState = playerStates[dateString];
-
-    // player_state에 따라 다른 스타일이나 마커를 적용합니다.
-    if (playerState) {
-      // 여기에서 player_state에 따른 스타일이나 마커를 정의합니다.
-      const markerStyle = { color: playerState === '출석' ? 'green' : 'red' };
-
-      return (
-        <div style={{ position: 'relative' }}>
-          <PickersDay {...pickersDayProps} />
-          <div style={{ position: 'absolute', top: 0, right: 0, ...markerStyle }}>
-            {/* 마커 아이콘 또는 커스텀 요소 */}
-            {playerState}
-          </div>
-        </div>
-      );
-    }
-
-    return <PickersDay {...pickersDayProps} />;
-  };
+  // 이벤트 데이터 생성
+  const events = Object.keys(dateStates).map(date => ({
+    title: dateStates[date],
+    start: date,
+  }));
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DateCalendar renderDay={renderDay} />
-    </LocalizationProvider>
+    <FullCalendar
+      plugins={[dayGridPlugin, interactionPlugin]}
+      initialEvents={events} // 이벤트 추가
+      dateClick={handleDateClick}
+    />
   );
 }
