@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Button, Select, MenuItem, FormControl } from '@mui/material';
+import {
+  Button,
+  Select,
+  MenuItem,
+  FormControl,
+  Card,
+  Typography,
+} from '@mui/material';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import SendIcon from '@mui/icons-material/Send';
 import { students } from '../../../config';
 
-function AttendanceTable() {
+function AttendanceTable({ classType, date }) {
   const initialAttendance = {};
   students.forEach((student) => {
     initialAttendance[student.id] = Array(8).fill(0); // 각 교시별 초기 상태는 0
@@ -13,7 +20,18 @@ function AttendanceTable() {
 
   const [attendance, setAttendance] = useState(initialAttendance);
   const saveAttendance = () => {
-    console.log(attendance); // 실제 구현에서는 서버로 보내거나 로컬 저장소에 저장
+    const studentsData = students.map((student) => ({
+      id: student.id,
+      attendance: attendance[student.id],
+    }));
+    // API에 보낼 전체 데이터 구조
+    const dataToSend = {
+      classType,
+      date,
+      students: studentsData,
+    };
+
+    console.log('dataToSend', dataToSend);
   };
 
   // 전체 셀을 '1'로 변경
@@ -60,7 +78,8 @@ function AttendanceTable() {
     6: 'pink', // 공결
   };
   return (
-    <div className="p-4 border border-solid rounded-lg shadow-md border-gray-200 space-y-4">
+    <Card className="px-4 py-8 space-y-4">
+      <Typography variant="h5">출석 현황</Typography>
       <div className="text-right space-x-3">
         <Button
           color="primary"
@@ -166,7 +185,7 @@ function AttendanceTable() {
           저장
         </Button>
       </div>
-    </div>
+    </Card>
   );
 }
 

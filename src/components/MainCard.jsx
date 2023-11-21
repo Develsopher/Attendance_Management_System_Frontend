@@ -55,13 +55,7 @@ const MainCard = forwardRef(
             theme.palette.mode === 'dark'
               ? theme.palette.divider
               : theme.palette.grey.A800,
-          boxShadow:
-            boxShadow && (!border || theme.palette.mode === 'dark')
-              ? shadow || theme.customShadows.z1
-              : 'inherit',
-          ':hover': {
-            boxShadow: boxShadow ? shadow || theme.customShadows.z1 : 'inherit',
-          },
+
           '& pre': {
             m: 0,
             p: '16px !important',
