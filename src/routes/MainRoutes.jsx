@@ -1,7 +1,7 @@
 import { lazy } from 'react';
 
 import Loadable from '../components/Loadable.jsx';
-import MainLayout from '../layout/MainLayout/index.jsx';
+import MainLayout from '../layout/MainLayout';
 
 // render - dashboard
 const DashboardDefault = Loadable(
