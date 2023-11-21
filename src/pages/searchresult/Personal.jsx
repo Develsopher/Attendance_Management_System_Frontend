@@ -66,7 +66,7 @@ export default function Personal({id}) {
       </thead>
       <tbody className="bg-blue-100 divide-y divde-blue-500">
       <tr>
-        <th className="px-6 py-4 whitespace-nowrap" scope="col">22</th>
+        <th className="px-6 py-4 whitespace-nowrap" scope="col">{player.total}</th>
         <th className="px-6 py-4 whitespace-nowrap" scope="col">20</th>
         <th className="px-6 py-4 whitespace-nowrap" scope="col">1</th>
         <th className="px-6 py-4 whitespace-nowrap" scope="col">2</th>

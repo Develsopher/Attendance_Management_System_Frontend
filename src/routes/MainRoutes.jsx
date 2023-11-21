@@ -8,7 +8,7 @@ const DashboardDefault = Loadable(
   lazy(() => import('../pages/dashboard/index.jsx')),
 );
 const SearchResults = Loadable(
-  lazy(() => import('../pages/serachresult/index.jsx')),
+  lazy(() => import('../pages/searchresult/index.jsx')),
 );
 const AdminManage = Loadable(lazy(() => import('../pages/admin/manage')));
 
