@@ -20,6 +20,10 @@ function MainLayout() {
         <Outlet />
       </div>
     </div>
+
+    
+    
+
   );
 }
 
