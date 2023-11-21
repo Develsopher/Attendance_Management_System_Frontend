@@ -1,27 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-// material-ui
-import { useTheme } from '@mui/material/styles';
-import { Box, Toolbar, useMediaQuery } from '@mui/material';
-
 // project-import
-import Header from './Header/index.jsx';
+import Header from './Header.jsx';
+import Drawer from './Drawer.jsx';
 
 function MainLayout() {
+  const [isDrawOpen, setIsDrawOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawOpen((prev) => !prev);
+  };
   return (
-    <Box sx={{ display: 'flex', width: '100%' }}>
-      <Header />
-      {/* drawer */}
-      <Box
-        component="main"
-        sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}
-      >
-        <Toolbar />
+    <div>
+      <Header onMenuClick={toggleDrawer} username="John Doe" />
+      <Drawer isOpen={isDrawOpen} onClose={toggleDrawer} />
+      <div className="p-2 sm:p-3">
+        <div className="h-12"></div>
         <Outlet />
-      </Box>
-    </Box>
+      </div>
+    </div>
+
     
+    
+
   );
 }
 

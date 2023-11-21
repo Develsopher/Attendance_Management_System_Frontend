@@ -1,9 +1,9 @@
 import { useRoutes } from 'react-router-dom';
 
 // project import
-// login routes (예정)
+import LoginRoutes from './LoginRoutes.jsx';
 import MainRoutes from './MainRoutes.jsx';
 
-export default function ThemeRoutes() {
-  return useRoutes([MainRoutes]);
+export default function Routes() {
+  return useRoutes([MainRoutes, LoginRoutes]);
 }
