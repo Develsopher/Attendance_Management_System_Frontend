@@ -7,9 +7,8 @@ import MainLayout from '../layout/MainLayout';
 const DashboardDefault = Loadable(
   lazy(() => import('../pages/dashboard/index.jsx')),
 );
-const SearchResults = Loadable(
-  lazy(() => import('../pages/searchresult/index.jsx')),
-);
+const Search = Loadable(lazy(() => import('../pages/search')));
+const SearchResults = Loadable(lazy(() => import('../pages/search/result')));
 const AdminManage = Loadable(lazy(() => import('../pages/admin/manage')));
 
 const MainRoutes = {
@@ -19,6 +18,10 @@ const MainRoutes = {
     {
       path: '/',
       element: <DashboardDefault />,
+    },
+    {
+      path: 'search',
+      element: <Search />,
     },
     {
       path: 'search/results/:id',
