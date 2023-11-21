@@ -21,6 +21,7 @@ function MainLayout() {
         <Outlet />
       </Box>
     </Box>
+    
   );
 }
 
