@@ -38,17 +38,20 @@ const renderCustomizedLabel = ({
   );
 };
 
-export default function Personal({ id }) {
+export default function Personal({ course, name, pw }) {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    if (id) {
+    if (course && name && pw) {
       getPlayers().then((players) => {
-        const foundPlayer = players.find((p) => p.id === parseInt(id));
-        setPlayer(foundPlayer);
+        const foundPlayer = players.find((p) => 
+        p.course === decodeURIComponent(course) &&
+          p.name === decodeURIComponent(name) &&
+          p.pw === pw)
+          setPlayer(foundPlayer);
       });
     }
-  }, [id]);
+  }, [course, name, pw]);
 
   if (!player) {
     return <div>Loading...</div>; // 데이터 로딩 중 표시

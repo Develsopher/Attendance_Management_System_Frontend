@@ -5,6 +5,8 @@ export const getPlayers = async () => {
   return data.players;
 };
 
+
+
 export const getCourses = async () => {
   const response = await fetch('/data/courses.json');
   const data = await response.json();

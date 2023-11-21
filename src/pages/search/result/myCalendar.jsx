@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
-export default function MyCalendar() {
+export default function MyCalendar({startDate, endDate}) {
   const handleDateClick = (arg) => {
     alert(arg.dateStr);
     
@@ -35,16 +35,22 @@ export default function MyCalendar() {
   };
 
   // 이벤트 데이터 생성
-  const events = Object.keys(dateStates).map(date => ({
-    title: dateStates[date],
-    start: date,
-  }));
+  const filteredEvents = Object.keys(dateStates)
+    .filter(date => {
+      const currentDate = new Date(date);
+      return startDate <= currentDate && currentDate <= endDate;
+    })
+    .map(date => ({
+      title: dateStates[date],
+      start: date,
+    }));
 
   return (
     <FullCalendar
       plugins={[dayGridPlugin, interactionPlugin]}
-      initialEvents={events} // 이벤트 추가
+      initialEvents="dayGridMonth" // 이벤트 추가
       dateClick={handleDateClick}
+      validRange={{ start: startDate, end: endDate }} // 유효 범위 설정
     />
   );
 }
