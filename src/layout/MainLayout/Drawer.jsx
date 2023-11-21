@@ -6,7 +6,7 @@ const Drawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { name: '출석 조회', path: '/' },
+    { name: '출석 조회', path: '/search' },
     { name: '출석 관리', path: '/admin/manage' },
   ];
 
