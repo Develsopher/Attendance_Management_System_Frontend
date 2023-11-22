@@ -80,8 +80,9 @@ export default function MyCalendar({ startDate, endDate }) {
   console.log(startDate, endDate);
 
   return (
-    <div style={{ height: '500px' }}>
+    <div style={{ height: '500px'}}>
       <Calendar
+      className="m-5"
         localizer={localizer}
         events={filteredEvents}
         startAccessor="start"

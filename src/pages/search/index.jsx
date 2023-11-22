@@ -13,6 +13,29 @@ function Search() {
   const [classes, setClasses] = useState([]);
   const { id } = useParams();
 
+  const [response, setResponse] = useState({});
+
+  const getResult = async () => {
+    try {
+      await axios.get('http://localhost:8080/search/result', {
+        params: {
+          name,
+          course,
+          pw,
+          startDate,
+          endDate
+        }
+      }).then(response => setResponse(response));
+    } catch (e){
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    getResult();
+  }, []);
+  console.log("response:",response);
+
   useEffect(() => {
     getPlayers().then((players) => {
       // 고유한 course 값을 추출하여 클래스 목록 설정
@@ -107,12 +130,12 @@ function Search() {
 
         <div className="mb-4">
           <label className="block mb-2 text-sm font-bold text-gray-700">
-            Your Birth:
+            Your Pw:
           </label>
           <input
             className="shadow border rounded w-full py-2 px-3 text-gray-700"
             type="text"
-            placeholder="Enter your birth"
+            placeholder="Enter your pw"
             value={selectedPlayer.pw}
             onChange={handlePwChange}
           />
