@@ -61,6 +61,4 @@ const students = [
   { id: 60, name: '최지민' },
 ];
 
-const classLists = ['풀스택 1회차', '풀스택 2회차', '풀스택 3회차'];
-
-export { students, classLists };
+export { students };

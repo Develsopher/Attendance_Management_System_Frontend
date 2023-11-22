@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import PublicRoute from './PublicRoute';
 
 // project import
 import Loadable from '../components/Loadable';
@@ -9,7 +10,11 @@ const AuthLogin = Loadable(lazy(() => import('../pages/authentication/Login')));
 
 const LoginRoutes = {
   path: '/',
-  element: <MinimalLayout />,
+  element: (
+    <PublicRoute>
+      <MinimalLayout />
+    </PublicRoute>
+  ),
   children: [
     {
       path: 'login',
