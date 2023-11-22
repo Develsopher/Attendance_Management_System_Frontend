@@ -1,14 +1,11 @@
 import React from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-export default function MyCalendar({startDate, endDate}) {
-  const handleDateClick = (arg) => {
-    alert(arg.dateStr);
-    
-  };
+const localizer = momentLocalizer(moment);
 
+export default function MyCalendar({ startDate, endDate }) {
   const dateStates = {
     '2023-11-01': '결석',
     '2023-11-02': '외출',
@@ -32,25 +29,33 @@ export default function MyCalendar({startDate, endDate}) {
     '2023-11-28': '출석',
     '2023-11-29': '출석',
     '2023-11-30': '조퇴'
+
   };
 
-  // 이벤트 데이터 생성
+  // 날짜 상태를 이벤트 배열로 변환
   const filteredEvents = Object.keys(dateStates)
-    .filter(date => {
-      const currentDate = new Date(date);
-      return startDate <= currentDate && currentDate <= endDate;
-    })
-    .map(date => ({
-      title: dateStates[date],
-      start: date,
-    }));
+  .filter(date => {
+    const eventDate = new Date(date);
+    return startDate <= eventDate && eventDate <= endDate;
+  })
+  .map(date => ({
+    title: dateStates[date],
+    start: new Date(date),
+    end: new Date(date),
+    allDay: true
+  }));
 
   return (
-    <FullCalendar
-      plugins={[dayGridPlugin, interactionPlugin]}
-      initialEvents="dayGridMonth" // 이벤트 추가
-      dateClick={handleDateClick}
-      validRange={{ start: startDate, end: endDate }} // 유효 범위 설정
-    />
+    <div style={{ height: '500px' }}>
+      <Calendar
+        localizer={localizer}
+        events={filteredEvents}
+        startAccessor="start"
+        endAccessor="end"
+        defaultDate={moment(startDate).toDate()}
+        min={moment(startDate).toDate()}
+        max={moment(endDate).toDate()}
+      />
+    </div>
   );
 }

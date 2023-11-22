@@ -7,7 +7,7 @@ import { getPlayers } from '../../apis';
 function Search() {
   const [selectedClass, setSelectedClass] = useState('');
   const [players, setPlayers] = useState([]);
-  const [selectedPlayer, setSelectedPlayer] = useState({ name: '', birth: '' });
+  const [selectedPlayer, setSelectedPlayer] = useState({ name: '', pw: '' });
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [classes, setClasses] = useState([]);
@@ -26,7 +26,7 @@ function Search() {
       getPlayers().then((players) => {
         const foundPlayer = players.find((p) => p.id === parseInt(id));
         if (foundPlayer) {
-          setSelectedPlayer({ name: foundPlayer.name, pw: foundPlayer.pw || foundPlayer.birth });
+          setSelectedPlayer({ name: foundPlayer.name, pw: foundPlayer.pw || foundPlayer.course });
       }});
     }
   }, [id]);
@@ -35,15 +35,22 @@ function Search() {
     setSelectedPlayer({ ...selectedPlayer, name: e.target.value });
   };
 
-  const handleBirthChange = (e) => {
-    setSelectedPlayer({ ...selectedPlayer, birth: e.target.value });
+  const handlePwChange = (e) => {
+    setSelectedPlayer({ ...selectedPlayer, pw: e.target.value });
   };
 
   const navigate = useNavigate();
 
+  const formatDateString = (date) => {
+    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+      return ''; // 유효하지 않은 날짜인 경우 빈 문자열 반환
+    }
+    return date.toLocaleDateString('en-CA'); // 'YYYY-MM-DD' 형식으로 반환
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault(); //폼제출 시 페이지 새로고침 방지
-    const path = `/search/${selectedClass}/${selectedPlayer.name}/${selectedPlayer.pw}/${selectedPlayer.startDate}/${selectedPlayer.endDate}`;
+    const path = `/search/${selectedClass}/${selectedPlayer.name}/${selectedPlayer.pw}/${formatDateString(startDate)}/${formatDateString(endDate)}`;
     navigate(path);
   console.log("Submitted Data:", formData);
 
@@ -53,14 +60,13 @@ function Search() {
     course : selectedClass,
     name : selectedPlayer.name,
     pw : selectedPlayer.pw,
-    startDate,
-    endDate
+    startDate : formatDateString(startDate),
+    endDate : formatDateString(endDate)
   };
 
   //데이터 베이스로 데이터 전송 (API 요청)
   //예) await sendFormDataToDatabase(formData);
-
-
+  
 
   return (
     <div className="flex h-screen justify-center items-center">
@@ -105,7 +111,7 @@ function Search() {
             type="text"
             placeholder="Enter your birth"
             value={selectedPlayer.pw}
-            onChange={handleBirthChange}
+            onChange={handlePwChange}
           />
         </div>
 
