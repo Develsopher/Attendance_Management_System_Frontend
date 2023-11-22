@@ -18,12 +18,10 @@ function PlayerCreate() {
     }
     e.preventDefault();
     const createData = { selectedCourse, name, birthDate };
-    console.log('createData', createData);
   };
-  console.log('render');
   return (
     <div className="flex h-screen justify-center items-center">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md">
+      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-center text-2xl font-bold mb-4">플레이어 등록</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -80,7 +78,7 @@ function PlayerCreate() {
           </div>
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full bg-gray-800 hover:bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             등록하기
           </button>

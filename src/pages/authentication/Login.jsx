@@ -1,36 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { getCourses } from '../../apis';
+import { useCookies } from 'react-cookie';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/slices/authSlice';
 
 function Login() {
-  const [tab, setTab] = useState('Player'); // 탭 상태 ('Admin' 또는 'Player')
+  const dispatch = useDispatch();
+  const [tab, setTab] = useState('Player');
+  // Player
   const [courses, setCourses] = useState([]);
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
   const [selectedCourse, setSelectedCourse] = useState('');
   const [name, setName] = useState('');
   const [birthDate, setBirthDate] = useState('');
+
+  //Admin
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [cookies, setCookies] = useCookies();
 
   useEffect(() => {
     getCourses().then((courses) => setCourses(courses));
   }, []);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     // 로그인 로직 처리
     const loginData =
       tab === 'Admin' ? { id, password } : { selectedCourse, name, birthDate };
     console.log('로그인 시도:', loginData);
+
+    const signInResponse = await signInApi(loginData);
+
+    if (!signInResponse) {
+      alert('로그인에 실패하였습니다.');
+      return;
+    }
+
+    if (!signInResponse.result) {
+      alert('로그인에 실패하였습니다.');
+      return;
+    }
+
+    const { token, role } = responseData.data;
+    const expires = new Date();
+    expires.setMilliseconds(expires.getMilliseconds + 3600000);
+    setCookies('token', token, { expires });
+    dispatch(setUser('admin'));
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-200">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md">
+      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-center text-2xl font-bold mb-4">로그인</h2>
 
         <div className="flex justify-center mb-6">
           <button
             className={`px-4 py-2 ${
-              tab === 'Player' ? 'bg-indigo-600 text-white' : 'bg-gray-200'
+              tab === 'Player' ? 'bg-gray-800 text-white' : 'bg-gray-200'
             }`}
             onClick={() => setTab('Player')}
           >
@@ -38,7 +65,7 @@ function Login() {
           </button>
           <button
             className={`px-4 py-2 ${
-              tab === 'Admin' ? 'bg-indigo-600 text-white' : 'bg-gray-200'
+              tab === 'Admin' ? 'bg-gray-800 text-white' : 'bg-gray-200'
             }`}
             onClick={() => setTab('Admin')}
           >
@@ -143,7 +170,7 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full bg-gray-800 hover:bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             로그인
           </button>

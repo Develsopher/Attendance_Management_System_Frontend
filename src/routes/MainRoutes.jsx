@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import PrivateRoute from './PrivateRoute';
 
 import Loadable from '../components/Loadable.jsx';
 import MainLayout from '../layout/MainLayout';
@@ -16,7 +17,11 @@ const PlayerCreate = Loadable(
 
 const MainRoutes = {
   path: '/',
-  element: <MainLayout />,
+  element: (
+    <PrivateRoute>
+      <MainLayout />
+    </PrivateRoute>
+  ),
   children: [
     {
       path: '/',
