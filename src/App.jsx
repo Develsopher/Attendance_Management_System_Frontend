@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
 import Routes from './routes';
-
+import { useDispatch } from 'react-redux';
+import { setUser } from './store/slices/authSlice';
+import { useCookies } from 'react-cookie';
 
 
 function App() {
-  const [connection, setConnection] = useState('');
+  const [cookies] = useCookies(['token', 'role']);
+  const dispatch = useDispatch();
 
-  const connectionTest = () => {
-    axios.get();
-  };
+  useEffect(() => {
+    const token = cookies.token;
+    if (token && role) {
+      dispatch(setUser(role));
+    }
+  }, [cookies, dispatch]);
+
   return (
     <>
       <Routes/>
