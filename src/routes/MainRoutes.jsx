@@ -18,9 +18,9 @@ const PlayerCreate = Loadable(
 const MainRoutes = {
   path: '/',
   element: (
-    <PrivateRoute>
-      <MainLayout />
-    </PrivateRoute>
+    // <PrivateRoute>
+    <MainLayout />
+    // </PrivateRoute>
   ),
   children: [
     {

@@ -1,14 +1,16 @@
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaCloud } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 const Drawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const admin = useSelector((state) => state.authReducer.user);
 
-  const menuItems = [
-    { name: '출석 조회', path: '/search' },
-    { name: '출석 관리', path: '/admin/manage' },
-  ];
+  const menuItems = [{ name: '출석 조회', path: '/search' }];
+  if (admin) {
+    menuItems.push({ name: '출석 관리', path: '/admin/manage' });
+  }
 
   const handleMenuClick = (path) => {
     navigate(path);

@@ -3,6 +3,7 @@ import { getCourses } from '../../apis';
 import { useCookies } from 'react-cookie';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../store/slices/authSlice';
+import { signInApi } from '../../apis/login';
 
 function Login() {
   const dispatch = useDispatch();
@@ -42,11 +43,10 @@ function Login() {
       return;
     }
 
-    const { token, role } = responseData.data;
-    const expires = new Date();
-    expires.setMilliseconds(expires.getMilliseconds + 3600000);
-    setCookies('token', token, { expires });
-    dispatch(setUser('admin'));
+    const { token, role } = signInResponse;
+    setCookies('token', token);
+    setCookies('role', role);
+    // dispatch(setUser('admin'));
   };
 
   return (
