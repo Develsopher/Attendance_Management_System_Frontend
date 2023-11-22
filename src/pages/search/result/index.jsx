@@ -14,11 +14,13 @@ function SearchResults() {
   const startDate = queryParams.get('startDate');
   const endDate = queryParams.get('endDate');
 
+  
+
   return (
     <div>
       {/* Personal 컴포넌트에 name과 course 전달 */}
       <Personal name={name} course={course} pw={pw}/>
-
+      
       {/* MyCalendar 컴포넌트에 startDate와 endDate 전달 */}
       <MyCalendar startDate={startDate} endDate={endDate} />
     </div>

@@ -5,6 +5,11 @@ import { getPlayers } from '../../../apis';
 export default function Personal({ course, name, pw }) {
   const [player, setPlayer] = useState(null);
 
+  const handleApplication = (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    window.open('https://forms.gle/EbFMy9yv8Ax52E8M6', '_blank'); // Redirect to the URL
+  };
+
   useEffect(() => {
     if (course && name && pw) {
       getPlayers().then((players) => {
@@ -22,7 +27,7 @@ export default function Personal({ course, name, pw }) {
   }
 
   return (
-    <div className="flex p-2 gap-5 bg-blue-200 border rounded">
+    <div className="flex p-2 gap-5 bg-blue-100 shadow-md border rounded">
       <img
         alt="userPic"
         className="rounded-2xl h-40 m-4"
@@ -30,7 +35,10 @@ export default function Personal({ course, name, pw }) {
       />
       <div className=" flex flex-col justify-center w-96 mr-5">
         <span className="text-2xl font-semibold mb-5">{player.name}</span>
-        <span className="text-2xl font-semibold ">{player.course}</span>
+        <span className="text-2xl font-semibold mb-5">{player.course}</span>
+        <form className="" onSubmit={handleApplication}>
+        <button className ="bg-yellow-100 w-full border "><p className="font-bold text-lg">외출/조퇴 신청</p></button>
+        </form>
       </div>
       <div className="overflow-x-auto w-full">
         <h1 className="text-2xl font-bold mb-3">11월 현황</h1>

@@ -22,7 +22,6 @@ const parseDate = (dateStr) => {
   if (isNaN(date.getTime())) {
     throw new Error("Invalid date");
   }
-
   return date;
 };
 
@@ -54,7 +53,6 @@ export default function MyCalendar({ startDate, endDate }) {
 
   };
 
-
   let parsedStartDate, parsedEndDate;
 
   try {
@@ -82,8 +80,9 @@ export default function MyCalendar({ startDate, endDate }) {
   console.log(startDate, endDate);
 
   return (
-    <div style={{ height: '500px' }}>
+    <div style={{ height: '500px'}}>
       <Calendar
+      className="m-5"
         localizer={localizer}
         events={filteredEvents}
         startAccessor="start"
