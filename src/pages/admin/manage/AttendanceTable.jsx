@@ -42,8 +42,9 @@ function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
 
   // 특정 학생의 모든 셀을 '1'로 변경
   const setRowToOne = (studentId) => {
+    // console.log(studentId)
     const updated = data.map((student) => {
-      if (student.id === studentId) {
+      if (student.playerId === studentId) {
         return {
           ...student,
           attendance: student.attendance.map(() => 1),
@@ -125,9 +126,9 @@ function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {data.map((student) => (
-              <tr key={student.id}>
+              <tr key={student.playerId}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {student.name}
+                  {student.playerName}
                 </td>
                 {student.attendance.map((period, index) => {
                   return (
@@ -139,7 +140,7 @@ function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
                         <Select
                           value={period}
                           onChange={(event) =>
-                            handleStatusChange(student.id, index, event)
+                            handleStatusChange(student.playerId, index, event)
                           }
                           inputProps={{
                             sx: {
@@ -166,7 +167,7 @@ function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
                 <td>
                   <Button
                     variant="contained"
-                    onClick={() => setRowToOne(student.id)}
+                    onClick={() => setRowToOne(student.playerId)}
                   >
                     출석
                   </Button>

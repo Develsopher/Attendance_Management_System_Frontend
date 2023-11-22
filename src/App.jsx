@@ -10,6 +10,7 @@ function App() {
 
   useEffect(() => {
     const token = cookies.token;
+    const role = cookies.role;
     if (token && role) {
       dispatch(setUser(role));
     }

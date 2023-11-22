@@ -41,11 +41,11 @@ function Manage() {
     if (selectedCourse && selectedDate) {
       const formattedDate = formatDate(selectedDate);
       await fetchData(selectedCourse, formattedDate);
-      navigate(
-        `/admin/manage?course=${encodeURIComponent(
-          selectedCourse,
-        )}&date=${encodeURIComponent(formattedDate)}`,
-      );
+      // navigate(
+      //   `/admin/manage/${encodeURIComponent(
+      //     selectedCourse,
+      //   )}/${encodeURIComponent(formattedDate)}`,
+      // );
     } else {
       alert('검색 조건을 채워주세요.');
     }
@@ -55,6 +55,7 @@ function Manage() {
     setIsLoading(true);
     try {
       const data = await getAttendanceData(course, date);
+      console.log(data);
       setAttendanceData(data.students);
     } catch (error) {
       console.error('Error fetching data:', error);
