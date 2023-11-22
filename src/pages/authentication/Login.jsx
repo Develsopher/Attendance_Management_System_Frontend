@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import { classLists } from '../../config';
+import React, { useState, useEffect } from 'react';
+import { getCourses } from '../../apis';
 
 function Login() {
   const [tab, setTab] = useState('Player'); // 탭 상태 ('Admin' 또는 'Player')
+  const [courses, setCourses] = useState([]);
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
-  const [className, setClassName] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
   const [name, setName] = useState('');
   const [birthDate, setBirthDate] = useState('');
+
+  useEffect(() => {
+    getCourses().then((courses) => setCourses(courses));
+  }, []);
 
   const handleLogin = (e) => {
     e.preventDefault();
     // 로그인 로직 처리
     const loginData =
-      tab === 'Admin' ? { id, password } : { className, name, birthDate };
+      tab === 'Admin' ? { id, password } : { selectedCourse, name, birthDate };
     console.log('로그인 시도:', loginData);
   };
 
@@ -86,17 +91,18 @@ function Login() {
                   htmlFor="className"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  클래스명
+                  코스명
                 </label>
                 <select
                   id="className"
                   className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md py-2 px-1"
-                  value={className}
-                  onChange={(e) => setClassName(e.target.value)}
+                  value={selectedCourse}
+                  onChange={(e) => setSelectedCourse(e.target.value)}
                 >
-                  {classLists.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                  <option value="">-</option>
+                  {courses.map((option) => (
+                    <option key={option.id} value={option.name}>
+                      {option.name}
                     </option>
                   ))}
                 </select>

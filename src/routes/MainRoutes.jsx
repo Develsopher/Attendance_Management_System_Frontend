@@ -10,6 +10,9 @@ const DashboardDefault = Loadable(
 const Search = Loadable(lazy(() => import('../pages/search')));
 const SearchResults = Loadable(lazy(() => import('../pages/search/result')));
 const AdminManage = Loadable(lazy(() => import('../pages/admin/manage')));
+const PlayerCreate = Loadable(
+  lazy(() => import('../pages/admin/playercreate')),
+);
 
 const MainRoutes = {
   path: '/',
@@ -30,6 +33,10 @@ const MainRoutes = {
     {
       path: 'admin/manage',
       element: <AdminManage />,
+    },
+    {
+      path: 'admin/create',
+      element: <PlayerCreate />,
     },
   ],
 };
