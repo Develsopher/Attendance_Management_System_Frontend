@@ -22,7 +22,6 @@ const parseDate = (dateStr) => {
   if (isNaN(date.getTime())) {
     throw new Error("Invalid date");
   }
-
   return date;
 };
 
@@ -53,7 +52,6 @@ export default function MyCalendar({ startDate, endDate }) {
     '2023-11-30': '조퇴'
 
   };
-
 
   let parsedStartDate, parsedEndDate;
 
