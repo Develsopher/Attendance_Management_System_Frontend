@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { CiMenuBurger } from 'react-icons/ci';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +9,7 @@ const Header = ({ onMenuClick }) => {
   const dispatch = useDispatch();
   const handleLogout = () => {
     removeCookie('token');
+    removeCookie('role');
     dispatch(clearUser());
     navigate('/login'); // 로그아웃 후 로그인 페이지로 리디렉션
   };

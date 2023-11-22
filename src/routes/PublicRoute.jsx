@@ -7,7 +7,7 @@ export default function PublicRoute({ children }) {
 
   if (cookies.token) {
     // 토큰이 있으면 메인 페이지로 리디렉션
-    return <Navigate to="/" />;
+    return <Navigate to="/search" />;
   }
 
   return children;
