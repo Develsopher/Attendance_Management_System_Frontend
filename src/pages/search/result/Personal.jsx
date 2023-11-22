@@ -2,53 +2,20 @@ import React, { useEffect, useState } from 'react';
 import PieChart from './PieChart';
 import { getPlayers } from '../../../apis';
 
-const data = [
-  { name: 'Group A', value: 20 },
-  { name: 'Group B', value: 1 },
-  { name: 'Group C', value: 1 },
-];
-
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-const RADIAN = Math.PI / 180;
-
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-}) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="white"
-      textAnchor={x > cx ? 'start' : 'end'}
-      dominantBaseline="central"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-};
-
-export default function Personal({ id }) {
+export default function Personal({ course, name, pw }) {
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    if (id) {
+    if (course && name && pw) {
       getPlayers().then((players) => {
-        const foundPlayer = players.find((p) => p.id === parseInt(id));
-        setPlayer(foundPlayer);
+        const foundPlayer = players.find((p) => 
+        p.course === decodeURIComponent(course) &&
+          p.name === decodeURIComponent(name) &&
+          p.pw === pw)
+          setPlayer(foundPlayer);
       });
     }
-  }, [id]);
+  }, [course, name, pw]);
 
   if (!player) {
     return <div>Loading...</div>; // 데이터 로딩 중 표시
@@ -138,11 +105,7 @@ export default function Personal({ id }) {
           </tbody>
         </table>
       </div>
-      <PieChart
-        data={data}
-        COLORS={COLORS}
-        renderLabel={renderCustomizedLabel}
-      />
+      <PieChart/>
     </div>
   );
 }

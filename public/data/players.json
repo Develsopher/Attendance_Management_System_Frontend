@@ -3,18 +3,17 @@
 
         {"id": "1",
         "course": "풀스택 7회차",
-        "name": "Timothy Lee",
-        "birth": "1998-06-22"},
+        "name": "윤혜진",
+        "pw": "980724"},
         {
         "id": "2",
         "course": "풀스택 1회차",
-        "name": "Erika Burgess",
-        "birth": "1954-02-04"},
+        "name": "권승목",
+        "pw": "980724"},
         {
         "id": "3",
         "course": "풀스택 2회차",
-        "name": "Virginia Cooper",
-        "birth": "1986-12-11"}
-
+        "name": "남규린",
+        "pw": "951124"}
        ]
 }

@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from './store/slices/authSlice';
 import { useCookies } from 'react-cookie';
 
+
 function App() {
   const [cookies] = useCookies(['token', 'role']);
   const dispatch = useDispatch();
@@ -17,8 +18,8 @@ function App() {
 
   return (
     <>
-      <Routes />
-    </>
+      <Routes/>
+      </>
   );
 }
 

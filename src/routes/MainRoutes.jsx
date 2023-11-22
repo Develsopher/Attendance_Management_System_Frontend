@@ -32,7 +32,7 @@ const MainRoutes = {
       element: <Search />,
     },
     {
-      path: 'search/results/:id',
+      path: 'search/result',
       element: <SearchResults />,
     },
     {
