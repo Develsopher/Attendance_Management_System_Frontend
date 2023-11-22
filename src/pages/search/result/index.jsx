@@ -1,56 +1,28 @@
-import React, {useState, useEffect} from 'react'
-import Personal from "./Personal";
-import MyCalendar from "./MyCalendar";
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import Personal from './Personal';
+import MyCalendar from './myCalendar';
 
-function SearchResult() {
-  const { course, name, pw, startDateParam, endDateParam } = useParams();
-  const [player, setPlayer] = useState(null);
-  const startDate = startDateParam ? new Date(startDateParam) : null;
-  const endDate = endDateParam ? new Date(endDateParam) : null;
-
-  useEffect(() => {
-    if (startDateParam && endDateParam) {
-      const newStartDate = new Date(startDateParam);
-      const newEndDate = new Date(endDateParam);
-      setStartDate(newStartDate);
-      setEndDate(newEndDate);
-    }
-    const fetchPlayers = async () => {
-      try {
-        const response = await fetch('/data/players.json'); // '/players.json'으로 변경
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const text = await response.text();
-        try {
-          const data = JSON.parse(text);
-          // Process the data
-        } catch (e) {
-          console.error('Failure parsing JSON', e);
-          console.log('Received text:', text);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+function SearchResults() {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
   
-    fetchPlayers();
-  }, [startDateParam, endDateParam]);
-
-  console.log(startDate, endDate)
-
-// URL에서 startDate와 endDate를 추출하는 로직이 필요합니다.
-  // 예를 들어, URL에 startDate와 endDate가 쿼리 스트링으로 포함되어 있다면,
-  // 이를 파싱하여 상태를 설정해야 합니다.
+  // 쿼리 파라미터에서 데이터 추출
+  const name = queryParams.get('name');
+  const course = queryParams.get('course');
+  const pw = queryParams.get('pw');
+  const startDate = queryParams.get('startDate');
+  const endDate = queryParams.get('endDate');
 
   return (
-    <>
-      {player ? <Personal course={course} name={name} pw={pw} /> : <p>Loading...</p>}
-      <MyCalendar course={course} name={name} pw={pw} startDate={startDate} endDate={endDate}/>
-    </>
+    <div>
+      {/* Personal 컴포넌트에 name과 course 전달 */}
+      <Personal name={name} course={course} pw={pw}/>
+
+      {/* MyCalendar 컴포넌트에 startDate와 endDate 전달 */}
+      <MyCalendar startDate={startDate} endDate={endDate} />
+    </div>
   );
 }
 
-
-export default SearchResult;
+export default SearchResults;

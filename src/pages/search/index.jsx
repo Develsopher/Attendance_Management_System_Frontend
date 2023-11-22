@@ -14,21 +14,20 @@ function Search() {
   const { id } = useParams();
 
   useEffect(() => {
-
     getPlayers().then((players) => {
-      // 고유한 course 값을 추출
+      // 고유한 course 값을 추출하여 클래스 목록 설정
       const uniqueCourses = Array.from(new Set(players.map(p => p.course)))
-      .sort((a,b) => a.localeCompare(b));
+      .sort((a, b) => a.localeCompare(b));
       setClasses(uniqueCourses);
-    });
-
-    if (id) {
-      getPlayers().then((players) => {
+  
+      // id가 있을 경우 해당하는 플레이어를 찾아서 selectedPlayer 상태를 업데이트
+      if (id) {
         const foundPlayer = players.find((p) => p.id === parseInt(id));
         if (foundPlayer) {
           setSelectedPlayer({ name: foundPlayer.name, pw: foundPlayer.pw || foundPlayer.course });
-      }});
-    }
+        }
+      }
+    });
   }, [id]);
 
   const handleNameChange = (e) => {
@@ -49,11 +48,15 @@ function Search() {
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault(); //폼제출 시 페이지 새로고침 방지
-    const path = `/search/${selectedClass}/${selectedPlayer.name}/${selectedPlayer.pw}/${formatDateString(startDate)}/${formatDateString(endDate)}`;
-    navigate(path);
-  console.log("Submitted Data:", formData);
-
+    event.preventDefault();
+  const queryParams = new URLSearchParams({
+    course: selectedClass,
+    name: selectedPlayer.name,
+    pw: selectedPlayer.pw,
+    startDate: formatDateString(startDate),
+    endDate: formatDateString(endDate)
+  }).toString();
+  navigate(`/search/result?${queryParams}`);
   };
 
   const formData ={

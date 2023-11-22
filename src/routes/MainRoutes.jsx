@@ -24,7 +24,7 @@ const MainRoutes = {
       element: <Search />,
     },
     {
-      path: 'search/:course/:name/:pw/:startDateParam/:endDateParam',
+      path: 'search/result',
       element: <SearchResults />,
     },
     {
