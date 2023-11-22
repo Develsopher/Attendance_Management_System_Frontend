@@ -11,10 +11,11 @@ import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import SendIcon from '@mui/icons-material/Send';
 import { formatDate } from '../../../utils/helper';
+import { postAttendanceData } from '../../../apis';
 
 function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
   const [data, setData] = useState(attendanceData);
-  const saveAttendance = () => {
+  const saveAttendance = async () => {
     const dataToSend = {
       cousre: selectedCourse,
       date: formatDate(selectedDate),
@@ -22,6 +23,7 @@ function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
     };
 
     console.log('dataToSend', dataToSend);
+    await postAttendanceData(dataToSend);
   };
 
   // 전체 셀을 '1'로 변경
@@ -42,7 +44,6 @@ function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
 
   // 특정 학생의 모든 셀을 '1'로 변경
   const setRowToOne = (studentId) => {
-    // console.log(studentId)
     const updated = data.map((student) => {
       if (student.playerId === studentId) {
         return {
@@ -58,7 +59,7 @@ function AttendanceTable({ selectedCourse, selectedDate, attendanceData }) {
   const handleStatusChange = (studentId, period, event) => {
     const newValue = event.target.value;
     const updated = data.map((student) => {
-      if (student.id === studentId) {
+      if (student.playerId === studentId) {
         const updatedAttendance = student.attendance.map((value, index) =>
           index === period ? newValue : value,
         );

@@ -31,7 +31,7 @@ function Login() {
       tab === 'Admin' ? { id, password } : { selectedCourse, name, birthDate };
     console.log('로그인 시도:', loginData);
 
-    const signInResponse = await signInApi(loginData);
+    const signInResponse = await signInApi(loginData, tab);
 
     if (!signInResponse) {
       alert('로그인에 실패하였습니다.');
@@ -43,10 +43,15 @@ function Login() {
       return;
     }
 
-    const { token, role } = signInResponse;
-    setCookies('token', token);
-    setCookies('role', role);
-    // dispatch(setUser('admin'));
+    if (tab === 'Admin') {
+      const { token, role } = signInResponse;
+      setCookies('token', token);
+      setCookies('role', role);
+    } else {
+      const { token } = signInResponse;
+      setCookies('token', token);
+      setCookies('role', role);
+    }
   };
 
   return (
